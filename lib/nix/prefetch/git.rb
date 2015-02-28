@@ -1,3 +1,4 @@
+require "nix"
 require "fileutils"
 require "shellwords"
 
@@ -46,7 +47,7 @@ module Nix
           hash = Nix::Hash.hash_path(type, dir)
 
           # Add the downloaded file to the Nix store.
-          path = Nix::Store::add_fixed(hash, dir, :recursive => true)
+          path = Nix::Store.add_fixed(hash, dir, :recursive => true)
 
           Result.new(res.merge(
             :hash => hash,
