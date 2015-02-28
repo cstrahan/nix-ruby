@@ -2,12 +2,13 @@ require "nix"
 require "fileutils"
 require "shellwords"
 
+# This is based on `nix-prefetch-git`.
 module Nix
   module Prefetch
     class Git
       class Result
         attr_reader :hash
-        attr_reader :full_revision
+        attr_reader :sha
         attr_reader :path
 
         def initialize(attrs)
@@ -79,7 +80,7 @@ module Nix
             init_submodules(deep_clone)
           end
 
-          { :full_revision => full_revision }
+          { :sha => full_revision }
         end
       end
 
@@ -166,7 +167,7 @@ module Nix
             end
           end
 
-          # Do a full repack. Must run single-threaded, or else we loose determinism.
+          # Do a full repack. Must run single-threaded, or else we lose determinism.
           sh("git config pack.threads 1")
           sh("git repack -A -d -f")
           FileUtils.rm_f(".git/config")
