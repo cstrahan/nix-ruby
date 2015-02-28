@@ -4,6 +4,8 @@ module Nix
 
     TYPES = [:md5, :sha1, :sha256]
 
+    #---------------------------------------------------------------------------
+
     def self.assert_valid_type(type)
       unless TYPES.include?(type)
         fail "unknown hash type: #{type.inspect}"
@@ -16,6 +18,8 @@ module Nix
       hash = `nix-hash --type #{hash_type.shellescape} #{flat ? "--flat" : ""} #{path.shellescape}`
       base16decode(type, hash)
     end
+
+    #---------------------------------------------------------------------------
 
     attr_reader :raw
 
@@ -88,15 +92,14 @@ module Nix
     end
 
     def self.hash_size(type)
-      @hash_size ||=
-        case type
-        when :md5
-          16
-        when :sha1
-          20
-        when :sha256
-          32
-        end
+      case type
+      when :md5
+        16
+      when :sha1
+        20
+      when :sha256
+        32
+      end
     end
   end
 end
